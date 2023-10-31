@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  email String @unique
+  name String
+  password String
+  profile Profile?
+  account BankAccount[]
+}
+
+model Profile{
+  id Int @id @default(autoincrement())
+  identity_type String
+  identity_number Int
+  address String
+  user User @relation(fields: [userId],references:[id])
+  userId Int @unique
+}
+
+model BankAccount{
+  id Int @id @default(autoincrement())
+  bank_name String
+  bank_account_number Int
+  balance Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user User @relation(fields: [userId],references:[id])
+  userId Int
+  txSender Transaction[] @relation("Sender")
+  txReceiver Transaction[] @relation("Receiver")
+}
+model Transaction {
+  id Int @id @default(autoincrement())
+  source_account_id  Int
+  destination_account_number  Int
+  amount Float
+  sender BankAccount @relation(fields: [source_account_id], references: [id], name: "Sender")
+  receiver BankAccount @relation(fields: [destination_account_number], references: [id], name: "Receiver")
+}
