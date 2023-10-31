@@ -18,7 +18,7 @@ export const getUserDetails = async(req, res, next) => {
     try {
         const user = await prisma.user.findUnique({
             where: {
-                id : req.params.userid,
+                id : +req.params.userid,
             },
             include : {
                 profile:true
@@ -51,7 +51,7 @@ export const postUser = async(req, res, next) => {
                 profile : {
                     create : {
                         identity_type : req.body.identity_type,
-                        identity_number : req.body.identity_number,
+                        identity_number : +req.body.identity_number,
                         address : req.body.address,
                     }
                 }

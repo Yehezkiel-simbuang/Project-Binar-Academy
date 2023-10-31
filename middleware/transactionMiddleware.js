@@ -18,7 +18,7 @@ export const getTransactionDetails = async(req, res, next) => {
     try {
         const account = await prisma.transaction.findUnique({
             where: {
-                id : req.params.transactionid,
+                id : +req.params.transactionid,
             },
             include : {
                 sender : {
@@ -55,21 +55,21 @@ export const postTransaction = async(req, res, next) => {
         try {
             const sender = await prisma.bankAccount.findUnique({
                 where : {
-                    id : req.body.senderNumber
+                    id : +req.body.senderNumber
                 }
             })
             const receiver = await prisma.bankAccount.findUnique({
                 where : {
-                    id : req.body.destinationNumber
+                    id : +req.body.destinationNumber
                 }
             })
 
             if (sender && receiver) {
                 const transaction = await prisma.transaction.create({
                     data : {
-                        source_account_id : req.body.senderNumber,
-                        destination_account_number : req.body.destinationNumber,
-                        amount : req.body.amount
+                        source_account_id : +req.body.senderNumber,
+                        destination_account_number : +req.body.destinationNumber,
+                        amount : +req.body.amount
                     }
                 })
                 res.status(200).json({

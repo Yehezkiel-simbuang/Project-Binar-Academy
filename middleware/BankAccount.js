@@ -18,7 +18,7 @@ export const getAccountDetails = async(req, res, next) => {
     try {
         const account = await prisma.bankAccount.findUnique({
             where: {
-                id : req.params.accountid,
+                id : +req.params.accountid,
             }
         })
 
@@ -43,8 +43,8 @@ export const postAccount = async(req, res, next) => {
         const account = await prisma.bankAccount.create({
             data : {
                 bank_name : req.body.name,
-                bank_account_number : req.body.accNumber,
-                balance : req.body.balance
+                bank_account_number : +req.body.accNumber,
+                balance : +req.body.balance
             }
         })
         res.status(200).json({
