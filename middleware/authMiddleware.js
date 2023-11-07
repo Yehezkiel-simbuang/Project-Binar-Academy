@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const { errorHandler } = require("../utils/errorHandler");
 // const { response } = require("express");
-
+const dotenv = require("dotenv").config();
 const loginMiddleware = async (req, res, next) => {
   const email = req.body.email;
   const isUser = await prisma.user.findFirst({ where: { email } });
@@ -31,10 +31,7 @@ const authenticateMidlleware = (req, res, next) => {
   const token = req.cookies.access_token;
   if (!token) return next(errorHandler(401, "Token not found"));
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      console.log(err);
-      return next(errorHandler(401, "Token Invalid"));
-    }
+    if (err) return next(errorHandler(401, "Token Invalid"));
     res.status(200).json({
       status: "success",
       data: user,
