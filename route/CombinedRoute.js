@@ -1,9 +1,22 @@
-import express from "express";
-import { getUser, getUserDetails, postUser } from "../middleware/userMiddleware.js";
-import { getAccount, getAccountDetails, postAccount } from "../middleware/BankAccount.js";
-import { getTransaction, getTransactionDetails, postTransaction } from "../middleware/transactionMiddleware.js";
-
+const express = require("express");
 const combinedRouter = express.Router();
+const {
+  getUser,
+  getUserDetails,
+  postUser,
+} = require("../middleware/UserMiddleware");
+const {
+  getAccount,
+  getAccountDetails,
+  postAccount,
+} = require("../middleware/BankAccount");
+const {
+  getTransaction,
+  getTransactionDetails,
+  postTransaction,
+} = require("../middleware/transactionMiddleware");
+
+const { loginMiddleware } = require("../middleware/authMiddleware");
 
 combinedRouter.get("/users", getUser);
 combinedRouter.post("/create-user", postUser);
@@ -17,4 +30,4 @@ combinedRouter.get("/transactions", getTransaction);
 combinedRouter.post("/create-transactions", postTransaction);
 combinedRouter.get("/transactions/:transactionid", getTransactionDetails);
 
-export default combinedRouter;
+module.exports = { combinedRouter };
